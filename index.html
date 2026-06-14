@@ -804,35 +804,35 @@
 <!-- ═══════════ DASHBOARD ═══════════ -->
 <div id="view-dashboard" class="view active">
 
-  <div class="alert-banner">
-    ⚠️ Colmena D02 requiere alimentación · Colmena D03 no se vio la reina — revisión pendiente
+  <div class="success-banner" style="display:flex;">
+    ✅ Sistema listo — registra tus primeras colmenas en la pestaña Nueva Colmena
   </div>
 
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-value">5</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Colmenas activas</div>
-      <div class="stat-sub">Piloto Las Calderas</div>
+      <div class="stat-sub">Sin registros aún</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">3</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Sin alertas</div>
-      <div class="stat-sub">Estado normal</div>
+      <div class="stat-sub">—</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">2</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Requieren acción</div>
-      <div class="stat-sub">D02, D03</div>
+      <div class="stat-sub">—</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">22 gal</div>
+      <div class="stat-value">—</div>
       <div class="stat-label">Última cosecha</div>
-      <div class="stat-sub">Miel filtrada</div>
+      <div class="stat-sub">Sin registros</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">17.4%</div>
+      <div class="stat-value">—</div>
       <div class="stat-label">Humedad promedio</div>
-      <div class="stat-sub">✅ Óptimo</div>
+      <div class="stat-sub">Sin registros</div>
     </div>
   </div>
 
@@ -845,19 +845,16 @@
     <div class="checklist">
       <div class="checklist-header">✅ Lista de tareas pendientes</div>
       <div class="checklist-item" onclick="toggleCheck(this)">
-        <input type="checkbox"> Alimentar D02 con jarabe 1:1
+        <input type="checkbox"> Registrar las 5 colmenas del piloto en Nueva Colmena
       </div>
       <div class="checklist-item" onclick="toggleCheck(this)">
-        <input type="checkbox"> Buscar reina en D03
+        <input type="checkbox"> Hacer primera inspección de campo
       </div>
       <div class="checklist-item" onclick="toggleCheck(this)">
-        <input type="checkbox"> Verificar espacio en D04 (mucha miel)
+        <input type="checkbox"> Verificar vinculación de Google Forms con Sheets
       </div>
       <div class="checklist-item" onclick="toggleCheck(this)">
-        <input type="checkbox"> Revisión rutinaria D01, 05 (28 jun)
-      </div>
-      <div class="checklist-item" onclick="toggleCheck(this)">
-        <input type="checkbox"> Registrar cosecha en Google Sheets
+        <input type="checkbox"> Configurar API key de Claude en Config
       </div>
     </div>
 
@@ -1462,7 +1459,7 @@ function getSimbolo(index) {
 
 // Inventario por fila — para referencia y alertas de máximo (7 colmenas)
 const inventarioFilas = {
-  'A': 0, 'B': 0, 'C': 0, 'D': 5, 'E': 0
+  'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0
 };
 
 function calcularSimbolo() {
@@ -1559,13 +1556,7 @@ function limpiarRegistro() {
 
 <script>
 // ─── DATOS DEL APIARIO ───
-const hives = [
-  { id:'D01', num:'01', symbol:'⬡', line:'D', queen:'D01-R1', location:'Fila D', status:'good', statusLabel:'Normal', lastInsp:'2026-06-14', honey:75, moisture:17.5, action:'Revisión rutinaria el 28 jun' },
-  { id:'D02', num:'02', symbol:'○', line:'D', queen:'D02-R1', location:'Fila D', status:'warning', statusLabel:'Alimentar', lastInsp:'2026-06-14', honey:60, moisture:17.8, action:'⚠️ Alimentar con jarabe 1:1' },
-  { id:'D03', num:'03', symbol:'△', line:'D', queen:'D03-R1', location:'Fila D', status:'alert', statusLabel:'Revisar reina', lastInsp:'2026-06-14', honey:55, moisture:17.2, action:'⚠️ No se vio la reina — revisión urgente' },
-  { id:'D04', num:'04', symbol:'□', line:'D', queen:'D04-R1', location:'Fila D', status:'good', statusLabel:'Normal', lastInsp:'2026-06-14', honey:80, moisture:17.0, action:'Verificar espacio — colmena con mucha miel' },
-  { id:'D05', num:'05', symbol:'⬡○', line:'D', queen:'D05-R1', location:'Fila D', status:'good', statusLabel:'Normal', lastInsp:'2026-06-14', honey:70, moisture:17.5, action:'Revisión rutinaria el 28 jun' },
-];
+const hives = [];
 
 // ─── INIT ───
 document.addEventListener('DOMContentLoaded', () => {
