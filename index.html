@@ -1289,11 +1289,11 @@ Notas (Párrafo)</div>
       El sistema asigna automáticamente el ID y símbolo según las colmenas existentes en la fila seleccionada.
     </p>
 
-    <!-- PASO 1: Selección de fila -->
+    <!-- PASO 1: Fila y número manual -->
     <div class="form-grid">
       <div class="form-group">
         <label>Fila del apiario *</label>
-        <select id="reg-fila" onchange="calcularID()">
+        <select id="reg-fila" onchange="calcularSimbolo()">
           <option value="">Seleccionar fila...</option>
           <option value="A">Fila A</option>
           <option value="B">Fila B</option>
@@ -1303,16 +1303,31 @@ Notas (Párrafo)</div>
         </select>
       </div>
 
-      <!-- ID y símbolo asignados automáticamente -->
       <div class="form-group">
-        <label>ID asignado automáticamente</label>
+        <label>Número de colmena en la fila *</label>
+        <select id="reg-numero" onchange="calcularSimbolo()">
+          <option value="">Seleccionar número...</option>
+          <option value="1">01</option>
+          <option value="2">02</option>
+          <option value="3">03</option>
+          <option value="4">04</option>
+          <option value="5">05</option>
+          <option value="6">06</option>
+          <option value="7">07</option>
+        </select>
+      </div>
+
+      <!-- ID calculado -->
+      <div class="form-group">
+        <label>ID de la colmena</label>
         <div id="reg-id-display" style="background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:20px;font-weight:700;color:var(--miel-viva);min-height:42px;">
           —
         </div>
       </div>
 
+      <!-- Símbolo calculado automáticamente -->
       <div class="form-group">
-        <label>Símbolo visual asignado</label>
+        <label>Símbolo visual — asignado automáticamente</label>
         <div id="reg-simbolo-display" style="background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:18px;color:var(--turquesa-caribe);min-height:42px;">
           —
         </div>
@@ -1502,42 +1517,39 @@ function getSimbolo(index) {
   return { simbolos, nombres, combo };
 }
 
-// Inventario actual por fila (viene del Sheet — por ahora hardcoded del piloto)
+// Inventario por fila — para referencia y alertas de máximo (7 colmenas)
 const inventarioFilas = {
-  'A': 0,
-  'B': 0,
-  'C': 0,
-  'D': 5, // D01 a D05 piloto actual
-  'E': 0
+  'A': 0, 'B': 0, 'C': 0, 'D': 5, 'E': 0
 };
 
-function calcularID() {
+function calcularSimbolo() {
   const fila = document.getElementById('reg-fila').value;
-  if (!fila) {
+  const numero = document.getElementById('reg-numero').value;
+
+  if (!fila || !numero) {
     document.getElementById('reg-id-display').textContent = '—';
     document.getElementById('reg-simbolo-display').textContent = '—';
-    document.getElementById('reg-reina-id-display').textContent = 'Se asigna al seleccionar la fila';
+    document.getElementById('reg-reina-id-display').textContent = 'Se asigna al seleccionar fila y número';
     return;
   }
 
-  const existentes = inventarioFilas[fila] || 0;
-  const nuevoNum = existentes + 1;
-  const numStr = nuevoNum.toString().padStart(2, '0');
-  const nuevoID = fila + numStr;
+  const numStr = parseInt(numero).toString().padStart(2, '0');
+  const id = fila + numStr;
+  const index = parseInt(numero) - 1; // 0-based para el array de combinaciones
 
-  // Símbolo según posición (index base 0)
-  const simboloInfo = getSimbolo(existentes); // index = existentes (0-based)
+  const simboloInfo = getSimbolo(index);
 
-  document.getElementById('reg-id-display').textContent = nuevoID;
+  document.getElementById('reg-id-display').textContent = id;
 
   if (simboloInfo) {
     document.getElementById('reg-simbolo-display').innerHTML =
-      `<span style="font-size:22px;">${simboloInfo.simbolos}</span> <span style="font-size:12px;color:var(--text-muted);">${simboloInfo.nombres}</span>`;
+      '<span style="font-size:22px;">' + simboloInfo.simbolos + '</span> ' +
+      '<span style="font-size:12px;color:var(--text-muted);">' + simboloInfo.nombres + '</span>';
   } else {
-    document.getElementById('reg-simbolo-display').textContent = 'Máximo alcanzado — agrega nueva figura';
+    document.getElementById('reg-simbolo-display').textContent = 'Número fuera de rango';
   }
 
-  document.getElementById('reg-reina-id-display').textContent = nuevoID + '-R1';
+  document.getElementById('reg-reina-id-display').textContent = id + '-R1';
 }
 
 function toggleIdAnterior() {
