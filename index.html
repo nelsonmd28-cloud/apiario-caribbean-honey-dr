@@ -1295,10 +1295,11 @@ Notas (Párrafo)</div>
         <label>Fila del apiario *</label>
         <select id="reg-fila" onchange="calcularID()">
           <option value="">Seleccionar fila...</option>
-          <option value="D">Fila D (actual)</option>
+          <option value="A">Fila A</option>
+          <option value="B">Fila B</option>
+          <option value="C">Fila C</option>
+          <option value="D">Fila D (piloto actual)</option>
           <option value="E">Fila E</option>
-          <option value="F">Fila F</option>
-          <option value="G">Fila G</option>
         </select>
       </div>
 
@@ -1503,10 +1504,11 @@ function getSimbolo(index) {
 
 // Inventario actual por fila (viene del Sheet — por ahora hardcoded del piloto)
 const inventarioFilas = {
-  'D': 5, // D01 a D05 ya registradas
-  'E': 0,
-  'F': 0,
-  'G': 0
+  'A': 0,
+  'B': 0,
+  'C': 0,
+  'D': 5, // D01 a D05 piloto actual
+  'E': 0
 };
 
 function calcularID() {
