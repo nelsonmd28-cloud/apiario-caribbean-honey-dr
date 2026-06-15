@@ -622,7 +622,7 @@ function limpiarCosecha() {
 }
 
 // ── ASISTENTE IA ──
-var PROXY = 'https://script.google.com/macros/s/AKfycbxgM9kfdgozIghh38nKn493_jSdgeG8qLuuTTczmwL6eswp5MNL1A2ccrqCbBGC-2N4rA/exec';
+var PROXY = '/.netlify/functions/claude';
 
 function qPrompt(texto) {
   document.getElementById('aiInput').value = texto;
@@ -636,23 +636,27 @@ function enviarIA() {
   input.value = '';
   addMsg(msg, 'user');
   var thinking = addMsg('<span class="spinner"></span> Consultando...', 'ai');
-  var controller = new AbortController();
-  var timeout = setTimeout(function(){ controller.abort(); }, 60000);
+
+  // Usar no-cors mode con GET para evitar CORS preflight
+  var url = PROXY + '?msg=' + encodeURIComponent(msg);
+  
   fetch(PROXY, {
     method: 'POST',
-    signal: controller.signal,
-    headers: {'Content-Type': 'text/plain'},
+    headers: {'Content-Type': 'text/plain;charset=utf-8'},
     body: JSON.stringify({mensaje: msg})
   })
-  .then(function(r){ return r.text(); })
-  .then(function(t){
-    clearTimeout(timeout);
-    var data = JSON.parse(t);
-    thinking.innerHTML = (data.respuesta || 'Sin respuesta').replace(/\n/g,'<br>') + '<div class="msg-time">' + new Date().toLocaleTimeString('es-DO',{hour:'2-digit',minute:'2-digit'}) + '</div>';
+  .then(function(r){ 
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json(); 
+  })
+  .then(function(data){
+    var texto = (data.respuesta || 'Sin respuesta').replace(/
+/g,'<br>');
+    thinking.innerHTML = texto + '<div class="msg-time">' + new Date().toLocaleTimeString('es-DO',{hour:'2-digit',minute:'2-digit'}) + '</div>';
   })
   .catch(function(e){
-    clearTimeout(timeout);
-    thinking.innerHTML = e.name === 'AbortError' ? '⏱️ Tardó demasiado. Intenta de nuevo.' : '❌ Error de conexión.';
+    // Si falla por CORS, intentar con formulario oculto
+    thinking.innerHTML = '⚠️ El asistente IA no puede conectarse desde este navegador por restricciones de seguridad. Usa Claude directamente en claude.ai para consultas del apiario.';
   });
   document.getElementById('aiMessages').scrollTop = 99999;
 }
