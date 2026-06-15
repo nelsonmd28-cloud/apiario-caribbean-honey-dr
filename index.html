@@ -180,6 +180,28 @@ tr:hover td { background:rgba(255,255,255,0.03); }
   .hive-grid { grid-template-columns:repeat(2,1fr); }
 }
 </style>
+<script>
+function verificarLogin() {
+  var user = document.getElementById('login-user').value.trim();
+  var pass = document.getElementById('login-pass').value;
+  if (user === 'nelson.chdr' && pass === 'Calderas2026') {
+    document.getElementById('login-screen').style.display = 'none';
+    try { sessionStorage.setItem('chdr-auth','1'); } catch(e){}
+  } else {
+    var err = document.getElementById('login-error');
+    if (err) err.style.display = 'block';
+    document.getElementById('login-pass').value = '';
+  }
+}
+window.onload = function() {
+  try {
+    if (sessionStorage.getItem('chdr-auth') === '1') {
+      var ls = document.getElementById('login-screen');
+      if (ls) ls.style.display = 'none';
+    }
+  } catch(e) {}
+};
+</script>
 </head>
 <body>
 
@@ -193,7 +215,7 @@ tr:hover td { background:rgba(255,255,255,0.03); }
       <input id="login-user" type="text" placeholder="Usuario" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:12px 16px;color:#ffffff;font-family:Poppins,sans-serif;font-size:14px;width:100%;text-align:center;">
       <input id="login-pass" type="password" placeholder="Contraseña" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:12px 16px;color:#ffffff;font-family:Poppins,sans-serif;font-size:14px;width:100%;text-align:center;">
     </div>
-    <button id="btn-entrar" style="background:#f4b210;color:#046070;border:none;border-radius:8px;padding:14px;width:100%;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Entrar</button>
+    <button onclick="verificarLogin()" style="background:#f4b210;color:#046070;border:none;border-radius:8px;padding:14px;width:100%;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Entrar</button>
     <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:20px;">Caribbean Honey DR · Las Calderas, Baní</div>
   </div>
 </div>
