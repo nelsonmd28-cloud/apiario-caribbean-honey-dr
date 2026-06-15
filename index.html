@@ -193,7 +193,7 @@ tr:hover td { background:rgba(255,255,255,0.03); }
       <input id="login-user" type="text" placeholder="Usuario" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:12px 16px;color:#ffffff;font-family:Poppins,sans-serif;font-size:14px;width:100%;text-align:center;">
       <input id="login-pass" type="password" placeholder="Contraseña" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:12px 16px;color:#ffffff;font-family:Poppins,sans-serif;font-size:14px;width:100%;text-align:center;">
     </div>
-    <button onclick="verificarLogin()" style="background:#f4b210;color:#046070;border:none;border-radius:8px;padding:14px;width:100%;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Entrar</button>
+    <button id="btn-entrar" style="background:#f4b210;color:#046070;border:none;border-radius:8px;padding:14px;width:100%;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Entrar</button>
     <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:20px;">Caribbean Honey DR · Las Calderas, Baní</div>
   </div>
 </div>
@@ -455,15 +455,24 @@ function verificarLogin() {
   }
 }
 
-// Verificar sesión al cargar
 document.addEventListener('DOMContentLoaded', function() {
+  // Verificar sesión
   if (sessionStorage.getItem('chdr-auth') === '1') {
-    document.getElementById('login-screen').style.display = 'none';
+    var ls = document.getElementById('login-screen');
+    if (ls) ls.style.display = 'none';
   }
-  // Enter en campos de login
-  ['login-user','login-pass'].forEach(function(id) {
+
+  // Botón entrar
+  var btn = document.getElementById('btn-entrar');
+  if (btn) btn.addEventListener('click', verificarLogin);
+
+  // Enter en campos
+  var campos = ['login-user', 'login-pass'];
+  campos.forEach(function(id) {
     var el = document.getElementById(id);
-    if (el) el.addEventListener('keydown', function(e) { if (e.key==='Enter') verificarLogin(); });
+    if (el) el.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') verificarLogin();
+    });
   });
 });
 
