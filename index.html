@@ -1685,30 +1685,19 @@ async function analyzeWithAI() {
   div.style.display = 'block';
   div.innerHTML = '<div class="loading"><div class="spinner"></div> Analizando con Claude...</div>';
 
-  const apiKey = document.getElementById('cfg-claude-key')?.value || localStorage.getItem('claude_key') || '';
-  if (!apiKey) {
-    div.innerHTML = '⚠️ Configura tu API Key de Claude en la pestaña <strong>⚙️ Config</strong> para habilitar el análisis IA.';
-    return;
-  }
-
-  const prompt = `Eres un experto apicultor con experiencia en el Caribe y bosques secos tropicales. Analiza esta inspección de colmena de Caribbean Honey DR en Las Calderas, Baní, República Dominicana, y da recomendaciones específicas y prácticas:
-
-${datos}
-
-Flora disponible: cambrón, guasábara, cactus, guayacán.
-Responde en español, de forma directa y práctica. Máximo 150 palabras.`;
+  const prompt = `Eres un experto apicultor con experiencia en el Caribe y bosques secos tropicales. Analiza esta inspeccion de colmena de Caribbean Honey DR en Las Calderas, Bani, Republica Dominicana, y da recomendaciones especificas y practicas:\n\n${datos}\n\nFlora disponible: cambron, guasabara, cactus, guayacan.\nResponde en espanol, de forma directa y practica. Maximo 150 palabras.`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch( + PROXY_URL + , {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 400, messages: [{ role: 'user', content: prompt }] })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mensaje: prompt })
     });
     const data = await res.json();
-    const text = data.content?.[0]?.text || 'Error al procesar la respuesta.';
-    div.innerHTML = '<strong style="color:var(--miel-viva);">🤖 Análisis de Claude:</strong><br><br>' + text.replace(/\n/g, '<br>');
+    const text = data.respuesta || 'Error al procesar la respuesta.';
+    div.innerHTML = '<strong style="color:var(--miel-viva);">🤖 Analisis de Claude:</strong><br><br>' + text.replace(/\n/g, '<br>');
   } catch(e) {
-    div.innerHTML = '❌ Error de conexión. Verifica tu API key y conexión a internet.';
+    div.innerHTML = '❌ Error de conexion.';
   }
 }
 
