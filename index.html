@@ -789,14 +789,14 @@
 
 <!-- NAV -->
 <nav>
-  <button class="tab active" onclick="showView('dashboard')">🏠 Dashboard</button>
-  <button class="tab" onclick="showView('colmenas')">🐝 Colmenas</button>
-  <button class="tab" onclick="showView('inspeccion')">📋 Inspección</button>
-  <button class="tab" onclick="showView('cosecha')">🍯 Cosecha</button>
-  <button class="tab" onclick="showView('formularios')">📝 Formularios</button>
-  <button class="tab" onclick="showView('asistente')">🤖 Asistente IA</button>
-  <button class="tab" onclick="showView('registro')">🐝 Nueva Colmena</button>
-  <button class="tab" onclick="showView('configuracion')">⚙️ Config</button>
+  <button class="tab active" onclick="showView('dashboard', this)">🏠 Dashboard</button>
+  <button class="tab" onclick="showView('colmenas', this)">🐝 Colmenas</button>
+  <button class="tab" onclick="showView('inspeccion', this)">📋 Inspección</button>
+  <button class="tab" onclick="showView('cosecha', this)">🍯 Cosecha</button>
+  <button class="tab" onclick="showView('formularios', this)">📝 Formularios</button>
+  <button class="tab" onclick="showView('asistente', this)">🤖 Asistente IA</button>
+  <button class="tab" onclick="showView('registro', this)">🐝 Nueva Colmena</button>
+  <button class="tab" onclick="showView('configuracion', this)">⚙️ Config</button>
 </nav>
 
 <main>
@@ -1631,11 +1631,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ─── NAVEGACIÓN ───
-function showView(name) {
+function showView(name, el) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('view-' + name).classList.add('active');
-  event.target.classList.add('active');
+  var view = document.getElementById('view-' + name);
+  if (view) view.classList.add('active');
+  if (el) el.classList.add('active');
 }
 
 // ─── RENDER COLMENAS ───
