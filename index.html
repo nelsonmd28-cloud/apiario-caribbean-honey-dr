@@ -199,8 +199,6 @@ tr:hover td { background:rgba(255,255,255,0.03); }
 <nav id="mainNav">
   <button class="tab active" data-view="dashboard">🏠 Dashboard</button>
   <button class="tab" data-view="colmenas">🐝 Colmenas</button>
-  <button class="tab" data-view="inspeccion">📋 Inspección</button>
-  <button class="tab" data-view="cosecha">🍯 Cosecha</button>
   <button class="tab" data-view="formularios">📝 Formularios</button>
   <button class="tab" data-view="asistente">🤖 Asistente IA</button>
   <button class="tab" data-view="registro">🐝 Nueva Colmena</button>
@@ -260,105 +258,6 @@ tr:hover td { background:rgba(255,255,255,0.03); }
       <thead><tr><th>ID</th><th>Fila</th><th>Símbolo</th><th>Reina</th><th>Origen</th><th>Fecha instalación</th><th>Estado</th></tr></thead>
       <tbody id="colmenasTable"><tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px;">Sin registros</td></tr></tbody>
     </table>
-  </div>
-</div>
-
-<!-- INSPECCIÓN -->
-<div id="view-inspeccion" class="view">
-  <p class="section-title">Nueva inspección de campo</p>
-  <div id="ins-success" class="banner-success"></div>
-  <div class="card">
-    <div class="form-grid">
-      <div class="form-group"><label>Colmena *</label>
-        <select id="ins-colmena">
-          <option value="">Seleccionar...</option>
-          <option>D01 - Hexagono</option><option>D02 - Circulo</option>
-          <option>D03 - Triangulo</option><option>D04 - Cuadrado</option>
-          <option>D05 - Hexagono-Circulo</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Fecha *</label><input type="date" id="ins-fecha"></div>
-      <div class="form-group"><label>Inspector</label><input type="text" id="ins-inspector" value="Nelson"></div>
-      <div class="form-group"><label>¿Se vio la reina?</label>
-        <div class="radio-group">
-          <label class="radio-option"><input type="radio" name="reina" value="Si"> Sí</label>
-          <label class="radio-option"><input type="radio" name="reina" value="No"> No</label>
-        </div>
-      </div>
-      <div class="form-group"><label>¿Hay huevos?</label>
-        <div class="radio-group">
-          <label class="radio-option"><input type="radio" name="huevos" value="Si"> Sí</label>
-          <label class="radio-option"><input type="radio" name="huevos" value="No"> No</label>
-        </div>
-      </div>
-      <div class="form-group"><label>Marcos con cría</label><input type="number" id="ins-cria" min="0" max="10"></div>
-      <div class="form-group"><label>Marcos con abejas</label><input type="number" id="ins-abejas" min="0" max="10"></div>
-      <div class="form-group"><label>Población</label>
-        <select id="ins-poblacion">
-          <option value="">Seleccionar...</option>
-          <option>Alta - mas de 8 marcos</option><option>Media - 4 a 8 marcos</option><option>Baja - menos de 4 marcos</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Temperamento</label>
-        <select id="ins-temperamento">
-          <option value="">Seleccionar...</option>
-          <option>Docil</option><option>Nerviosa</option><option>Agresiva</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Marcos con miel</label><input type="number" id="ins-miel" min="0" max="10"></div>
-      <div class="form-group"><label>Signos de enfermedad</label><input type="text" id="ins-enfermedad" placeholder="Ninguno"></div>
-      <div class="form-group" style="grid-column:1/-1;"><label>Observaciones</label><textarea id="ins-obs" placeholder="Notas del estado de la colmena..."></textarea></div>
-    </div>
-    <div class="form-actions">
-      <button class="btn btn-primary" onclick="guardarInspeccion()">💾 Guardar en Sheets</button>
-      <button class="btn btn-secondary" onclick="limpiarInspeccion()">✕ Limpiar</button>
-    </div>
-  </div>
-</div>
-
-<!-- COSECHA -->
-<div id="view-cosecha" class="view">
-  <p class="section-title">Registro de extracción</p>
-  <div id="cos-success" class="banner-success"></div>
-  <div class="card">
-    <div class="form-grid">
-      <div class="form-group"><label>Fecha *</label><input type="date" id="cos-fecha"></div>
-      <div class="form-group"><label>Número de lote *</label><input type="text" id="cos-lote" placeholder="CHDR-2026-001"></div>
-      <div class="form-group"><label>Responsable</label><input type="text" id="cos-resp" value="Nelson"></div>
-      <div class="form-group"><label>¿Colmenas del sistema nuevo?</label>
-        <select id="cos-sistema">
-          <option value="">Seleccionar...</option>
-          <option>Si - colmenas del sistema</option>
-          <option>No - colmenas anteriores al sistema</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Colmenas del sistema (si aplica)</label>
-        <div style="display:flex;flex-direction:column;gap:4px;margin-top:4px;">
-          <label class="radio-option"><input type="checkbox" class="cos-col" value="D01"> D01 Hexagono</label>
-          <label class="radio-option"><input type="checkbox" class="cos-col" value="D02"> D02 Circulo</label>
-          <label class="radio-option"><input type="checkbox" class="cos-col" value="D03"> D03 Triangulo</label>
-          <label class="radio-option"><input type="checkbox" class="cos-col" value="D04"> D04 Cuadrado</label>
-          <label class="radio-option"><input type="checkbox" class="cos-col" value="D05"> D05 Hexagono-Circulo</label>
-        </div>
-      </div>
-      <div class="form-group"><label>Colmenas anteriores (si aplica)</label><textarea id="cos-anteriores" placeholder="Describe cuáles colmenas aportaron..."></textarea></div>
-      <div class="form-group"><label>Marcos extraídos</label><input type="number" id="cos-marcos"></div>
-      <div class="form-group"><label>Galones miel bruta</label><input type="number" id="cos-bruta" step="0.1" oninput="calcularFrascos()"></div>
-      <div class="form-group"><label>Galones miel filtrada</label><input type="number" id="cos-filtrada" step="0.1" oninput="calcularFrascos()"></div>
-      <div class="form-group"><label>Humedad del lote (%)</label><input type="number" id="cos-humedad" step="0.1" placeholder="Refractómetro"></div>
-      <div class="form-group"><label>Color</label>
-        <select id="cos-color">
-          <option value="">Seleccionar...</option>
-          <option>Ambar claro</option><option>Ambar</option><option>Ambar oscuro</option><option>Muy oscuro</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Frascos 567g estimados</label><input type="text" id="cos-frascos" readonly style="opacity:0.7;"></div>
-      <div class="form-group" style="grid-column:1/-1;"><label>Observaciones</label><textarea id="cos-obs" placeholder="Color, aroma, condiciones..."></textarea></div>
-    </div>
-    <div class="form-actions">
-      <button class="btn btn-primary" onclick="guardarCosecha()">💾 Guardar extracción</button>
-      <button class="btn btn-secondary" onclick="limpiarCosecha()">✕ Limpiar</button>
-    </div>
   </div>
 </div>
 
