@@ -181,26 +181,19 @@ tr:hover td { background:rgba(255,255,255,0.03); }
 }
 </style>
 <script>
+var AUTENTICADO = false;
 function verificarLogin() {
   var user = document.getElementById('login-user').value.trim();
   var pass = document.getElementById('login-pass').value;
   if (user === 'nelson.chdr' && pass === 'Calderas2026') {
+    AUTENTICADO = true;
     document.getElementById('login-screen').style.display = 'none';
-    try { sessionStorage.setItem('chdr-auth','1'); } catch(e){}
   } else {
     var err = document.getElementById('login-error');
     if (err) err.style.display = 'block';
     document.getElementById('login-pass').value = '';
   }
 }
-window.onload = function() {
-  try {
-    if (sessionStorage.getItem('chdr-auth') === '1') {
-      var ls = document.getElementById('login-screen');
-      if (ls) ls.style.display = 'none';
-    }
-  } catch(e) {}
-};
 </script>
 </head>
 <body>
