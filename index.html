@@ -1098,6 +1098,15 @@
     <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf8z4pkgw9mDOq4Qixa9CH46aeK4I2EQX7yR5fvTCSaeUj4nA/viewform?embedded=true" width="100%" height="700" frameborder="0" marginheight="0" marginwidth="0" style="border-radius:0 0 14px 14px;">Cargando formulario...</iframe>
   </div>
 
+  <!-- Form 3: Nueva Colmena -->
+  <div class="form-embed-wrapper" style="margin-bottom:20px;">
+    <div class="form-embed-header">
+      <div class="form-embed-title">🐝 Registro de Nueva Colmena</div>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSftcLv0gwIJiAAuV7ulq63SMn9ibdhX-P61B-acGC6rSB-dZA/viewform" target="_blank" class="btn btn-secondary" style="font-size:11px;padding:6px 12px;">Abrir en nueva pestaña ↗</a>
+    </div>
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSftcLv0gwIJiAAuV7ulq63SMn9ibdhX-P61B-acGC6rSB-dZA/viewform?embedded=true" width="100%" height="700" frameborder="0" marginheight="0" marginwidth="0" style="border-radius:0 0 14px 14px;">Cargando formulario...</iframe>
+  </div>
+
   <!-- Form 2: Extracción -->
   <div class="form-embed-wrapper">
     <div class="form-embed-header">
@@ -1518,18 +1527,59 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function registrarColmena() {
   const fila = document.getElementById('reg-fila').value;
+  const numero = document.getElementById('reg-numero').value;
   const origen = document.getElementById('reg-origen').value;
-  if (!fila || !origen) {
-    alert('Selecciona la fila y el origen de la colmena');
+
+  if (!fila || !numero || !origen) {
+    alert('Completa fila, número y origen antes de continuar');
     return;
   }
+
+  const id = document.getElementById('reg-id-display').textContent;
+  const simboloDiv = document.getElementById('reg-simbolo-display');
+  const simboloTexto = simboloDiv.innerText || simboloDiv.textContent;
+  const fecha = document.getElementById('reg-fecha').value;
+  const reinaId = document.getElementById('reg-reina-id-display').textContent;
+  const tipoCaja = document.getElementById('reg-tipo-caja').value;
+  const marcos = document.getElementById('reg-marcos').value;
+  const material = document.getElementById('reg-material').value;
+  const color = document.getElementById('reg-color').value;
+  const reinaOrigen = document.getElementById('reg-reina-origen').value;
+  const poblacion = document.getElementById('reg-poblacion').value;
+  const marcosCria = document.getElementById('reg-marcos-cria').value;
+  const observaciones = document.getElementById('reg-observaciones').value;
+  const idAnterior = document.getElementById('reg-id-anterior').value;
+
+  // Construir URL pre-llenada del Google Form
+  // Campos: entry.XXXXXX = valor
+  const baseUrl =  + form_url + ;
+  const params = new URLSearchParams({
+    'entry.856574063': id,              // ID de la colmena
+    'entry.1234567890': fila,           // Fila
+    'entry.2345678901': numero.padStart ? numero.toString().padStart(2,'0') : numero, // Número
+    'entry.3456789012': simboloTexto,   // Símbolo visual
+    'entry.4567890123': fecha,          // Fecha instalación
+    'entry.5678901234': origen,         // Origen colmena
+    'entry.6789012345': idAnterior,     // ID anterior
+    'entry.7890123456': tipoCaja,       // Tipo caja
+    'entry.8901234567': marcos,         // Marcos
+    'entry.9012345678': material,       // Material
+    'entry.123456789': color,           // Color
+    'entry.234567890': reinaId,         // ID reina
+    'entry.345678901': reinaOrigen,     // Origen reina
+    'entry.456789012': poblacion,       // Población
+    'entry.567890123': marcosCria,      // Marcos cría
+    'entry.678901234': observaciones    // Observaciones
+  });
+
+  // Abrir el form — nota: pre-llenado requiere entry IDs reales del form
+  // Por ahora abre el form limpio hasta obtener los entry IDs
+  window.open(baseUrl, '_blank');
+
   const banner = document.getElementById('reg-success');
   banner.style.display = 'flex';
-  const id = document.getElementById('reg-id-display').textContent;
-  banner.textContent = '✅ Colmena ' + id + ' registrada correctamente en el sistema';
-  // Actualizar inventario local
-  inventarioFilas[fila] = (inventarioFilas[fila] || 0) + 1;
-  setTimeout(() => banner.style.display = 'none', 5000);
+  banner.textContent = '✅ Abriendo formulario de registro para ' + id + ' — completa y envía para guardar en Sheets';
+  setTimeout(() => banner.style.display = 'none', 8000);
 }
 
 function limpiarRegistro() {
