@@ -168,10 +168,11 @@ a:hover{text-decoration:underline}
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
     <div class="card">
       <h3>✅ Tareas pendientes</h3>
-      <div class="checklist-item"><input type="checkbox"> Hacer primera inspección del piloto</div>
-      <div class="checklist-item"><input type="checkbox"> Registrar colmenas en el sistema</div>
-      <div class="checklist-item"><input type="checkbox"> Próxima extracción de colmenas actuales</div>
-      <div class="checklist-item"><input type="checkbox"> Verificar Google Forms con Sheets</div>
+      <div id="task-list"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <input type="text" id="new-task-input" placeholder="Nueva tarea..." style="flex:1;padding:9px 12px;border-radius:8px;background:rgba(0,0,0,0.3);color:white;border:1px solid rgba(255,255,255,0.2);font-size:13px;">
+        <button onclick="addTask()" style="padding:9px 16px;background:#f4b210;color:#046070;border:none;border-radius:8px;font-weight:bold;cursor:pointer;font-size:13px;">+</button>
+      </div>
     </div>
     <div class="card">
       <h3>🔗 Accesos directos</h3>
@@ -352,6 +353,78 @@ function calcular(){
   var url='https://docs.google.com/forms/d/e/1FAIpQLSftcLvOgwIJiAAuV7ulq63SMn9ibdhX-P6lB-acGC6rSB-dZA/viewform?entry.126459644='+encodeURIComponent(id)+'&entry.1272609277='+encodeURIComponent(fila)+'&entry.1153683518='+encodeURIComponent(n.toString().padStart(2,'0'))+'&entry.335788353='+encodeURIComponent(sym);
   document.getElementById('form-link').href=url;
 }
+
+// TAREAS PENDIENTES (persistentes en el navegador)
+var DEFAULT_TASKS = [
+  {text: 'Hacer primera inspección del piloto', done: false},
+  {text: 'Registrar colmenas en el sistema', done: false},
+  {text: 'Próxima extracción de colmenas actuales', done: false},
+  {text: 'Verificar Google Forms con Sheets', done: false}
+];
+
+function getTasks() {
+  try {
+    var saved = localStorage.getItem('chdr-tasks');
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  return DEFAULT_TASKS;
+}
+
+function saveTasks(tasks) {
+  try { localStorage.setItem('chdr-tasks', JSON.stringify(tasks)); } catch(e) {}
+}
+
+function renderTasks() {
+  var tasks = getTasks();
+  var list = document.getElementById('task-list');
+  if (!list) return;
+  if (tasks.length === 0) {
+    list.innerHTML = '<div style="font-size:13px;color:rgba(255,255,255,0.4);padding:10px 0;">Sin tareas pendientes</div>';
+    return;
+  }
+  list.innerHTML = tasks.map(function(t, i) {
+    return '<div class="checklist-item' + (t.done ? ' done' : '') + '" style="display:flex;align-items:center;gap:10px;">' +
+      '<input type="checkbox" ' + (t.done ? 'checked' : '') + ' onchange="toggleTask(' + i + ')">' +
+      '<span style="flex:1;">' + t.text + '</span>' +
+      '<span onclick="deleteTask(' + i + ')" style="cursor:pointer;color:rgba(255,255,255,0.4);font-size:16px;padding:0 4px;">✕</span>' +
+    '</div>';
+  }).join('');
+}
+
+function toggleTask(i) {
+  var tasks = getTasks();
+  tasks[i].done = !tasks[i].done;
+  saveTasks(tasks);
+  renderTasks();
+}
+
+function deleteTask(i) {
+  var tasks = getTasks();
+  tasks.splice(i, 1);
+  saveTasks(tasks);
+  renderTasks();
+}
+
+function addTask() {
+  var input = document.getElementById('new-task-input');
+  var text = input.value.trim();
+  if (!text) return;
+  var tasks = getTasks();
+  tasks.push({text: text, done: false});
+  saveTasks(tasks);
+  input.value = '';
+  renderTasks();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderTasks();
+  var input = document.getElementById('new-task-input');
+  if (input) {
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') addTask();
+    });
+  }
+});
 </script>
 </body>
 </html>
